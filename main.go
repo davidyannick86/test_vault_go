@@ -37,7 +37,7 @@ func getVaultClient() (*api.Client, error) {
 	return client, nil
 }
 
-func getSecret(client *api.Client, path string) (interface{}, error) {
+func getSecret(client *api.Client, path string, key string) (interface{}, error) {
 	// Crée un contexte avec timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -49,9 +49,9 @@ func getSecret(client *api.Client, path string) (interface{}, error) {
 		return nil, fmt.Errorf("erreur lecture secret: %w", err)
 	}
 
-	value, exists := secret.Data["tagada"]
+	value, exists := secret.Data[key]
 	if !exists {
-		return nil, fmt.Errorf("clé 'tagada' non trouvée")
+		return nil, fmt.Errorf("clé '%s' non trouvée", key)
 	}
 
 	return value, nil
@@ -65,7 +65,7 @@ func main() {
 	}
 
 	// Lit le secret
-	value, err := getSecret(client, "test/secret")
+	value, err := getSecret(client, "test/secret", "tagada")
 	if err != nil {
 		log.Fatalf("Erreur de lecture: %v", err)
 	}
