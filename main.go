@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time" // Ajout de l'import manquant
+	"time"
 
 	"github.com/hashicorp/vault/api"
 	"github.com/joho/godotenv"
